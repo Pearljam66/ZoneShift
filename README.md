@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/Pearljam66/ZoneShift/805402c2580b8cdea6aec8a7e9722b9676289345/ZoneShift/ZoneShift/Assets.xcassets/AppIcon.appiconset/workout_any.png" width="150" style="border: 3px solid white; border-radius: 15px; vertical-align: middle; margin-right: 20px;">
+  <img src="https://raw.githubusercontent.com/SarahUniverse/ZoneShift/78689e6ab66dbfd78d82fe75d8c664602b591ba0/ZoneShift/ZoneShift/Assets.xcassets/AppIcon.appiconset/1024.png" width="150" style="border: 3px solid white; border-radius: 15px; vertical-align: middle; margin-right: 20px;">
   <h1 style="display: inline-block; vertical-align: middle;">ZoneShift</h1>
 </div>
 
