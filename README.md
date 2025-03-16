@@ -13,3 +13,4 @@ Effortlessly bridge time zones with ZoneShift, a sleek SwiftUI app designed for 
 - Swift 
 - SwiftUI
 - macOS
+- SwiftData
