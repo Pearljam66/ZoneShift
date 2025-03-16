@@ -5,7 +5,7 @@
 
 Effortlessly bridge time zones with ZoneShift, a sleek SwiftUI app designed for macOS. Convert times across the globe with precision and ease, all in a minimalist, user-friendly interface.
 
-## Requirements:
+## Features:
 - Input a source time zone and add multiple target zones to instantly see the corresponding times, relative to your starting point.  
 - Automatically adjusts for daylight saving time worldwide, ensuring accuracy year-round.
 
