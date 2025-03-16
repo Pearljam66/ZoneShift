@@ -14,3 +14,11 @@ Effortlessly bridge time zones with ZoneShift, a sleek SwiftUI app designed for 
 - SwiftUI
 - macOS
 - SwiftData
+
+## License
+Proprietary Software
+
+© 2025 SarahUniverse
+
+This software and its source code are the exclusive property of SarahUniverse.
+No part of this software may be reproduced, distributed, or transmitted in any form or by any means without prior written permission.
