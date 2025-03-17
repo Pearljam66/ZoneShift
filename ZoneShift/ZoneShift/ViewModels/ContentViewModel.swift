@@ -8,14 +8,15 @@
 import SwiftUI
 import SwiftData
 
-final class ContentViewModel: ObservableObject {
+class ContentViewModel: ObservableObject {
     @Published var sourceTimeZone: String
+    @Published var startTime: Date
+    @Published var endTime: Date
     @Published var newTimeZone: String = ""
-    @Published var selectedDate: Date
 
     var modelContext: ModelContext {
         didSet {
-            _savedTimeZones = Query() // Re-initialize Query when context changes
+            _savedTimeZones = Query()
         }
     }
 
@@ -25,12 +26,24 @@ final class ContentViewModel: ObservableObject {
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
         self.sourceTimeZone = TimeZone.current.identifier
-        self.selectedDate = Date()
+        self.startTime = Calendar.current.date(bySettingHour: 17, minute: 0, second: 0, of: Date()) ?? Date() // Default 5:00 PM
+        self.endTime = Calendar.current.date(bySettingHour: 18, minute: 0, second: 0, of: Date()) ?? Date() // Default 6:00 PM
         self._savedTimeZones = Query()
     }
 
     var availableTimeZones: [String] {
         allTimeZones.filter { tz in !savedTimeZones.contains { $0.timeZoneName == tz } }
+    }
+
+    var currentTimeZoneDisplay: String {
+        let timeZone = TimeZone.current
+        let offset = timeZone.secondsFromGMT() / 3600
+        let sign = offset >= 0 ? "+" : "-"
+        return "\(timeZone.identifier) (UTC\(sign)\(offset))"
+    }
+
+    var savedTimeZoneList: [SavedTimeZone] {
+        savedTimeZones
     }
 
     func addTimeZone() {
@@ -41,8 +54,25 @@ final class ContentViewModel: ObservableObject {
         }
     }
 
-    var savedTimeZoneList: [SavedTimeZone] {
-        savedTimeZones
+    func timeRange(for timeZoneId: String) -> (start: Date, end: Date)? {
+        guard let sourceTZ = TimeZone(identifier: sourceTimeZone),
+              let targetTZ = TimeZone(identifier: timeZoneId) else { return nil }
+
+        let offset = TimeInterval(targetTZ.secondsFromGMT(for: startTime) - sourceTZ.secondsFromGMT(for: startTime))
+        let adjustedStart = startTime.addingTimeInterval(offset)
+        let adjustedEnd = endTime.addingTimeInterval(offset)
+
+        return (adjustedStart, adjustedEnd)
+    }
+
+    func formattedTimeRange(for timeZoneId: String) -> String {
+        guard let (start, end) = timeRange(for: timeZoneId) else {
+            return "Invalid time zone"
+        }
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        return "\(formatter.string(from: start)) - \(formatter.string(from: end))"
     }
 
 }
