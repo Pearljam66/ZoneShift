@@ -5,6 +5,7 @@
 //  Created by Sarah Clark on 3/16/25.
 //
 
+import SwiftData
 import SwiftUI
 
 struct TimeZoneGridRow: View {
@@ -51,4 +52,24 @@ struct TimeZoneGridRow: View {
         }
     }
 
+}
+
+#Preview("Light Mode") {
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: SavedTimeZone.self, configurations: config)
+    let context = ModelContext(container)
+
+    let viewModel = ContentViewModel(modelContext: context)
+    return TimeZoneGridRow(timeZoneId: "America/New_York", contentViewModel: viewModel)
+        .preferredColorScheme(.light)
+}
+
+#Preview("Dark Mode") {
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: SavedTimeZone.self, configurations: config)
+    let context = ModelContext(container)
+
+    let viewModel = ContentViewModel(modelContext: context)
+    return TimeZoneGridRow(timeZoneId: "America/New_York", contentViewModel: viewModel)
+        .preferredColorScheme(.dark)
 }
