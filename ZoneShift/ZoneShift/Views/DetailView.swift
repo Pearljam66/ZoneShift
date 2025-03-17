@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DetailView: View {
-    @ObservedObject var contentViewModel: ContentViewModel
+    var contentViewModel: ContentViewModel
 
     var body: some View {
         VStack(spacing: 0) {
@@ -45,7 +45,7 @@ struct DetailView: View {
             // Time Zone Rows
             List {
                 ForEach(contentViewModel.savedTimeZoneList, id: \.timeZoneName) { savedZone in
-                    TimeZoneGridRow(timeZoneId: savedZone.timeZoneName, viewModel: contentViewModel)
+                    TimeZoneGridRow(timeZoneId: savedZone.timeZoneName, contentViewModel: contentViewModel)
                         .listRowInsets(EdgeInsets())
                 }
             }

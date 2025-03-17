@@ -8,23 +8,23 @@
 import SwiftUI
 
 struct TimeZoneRow: View {
-    @ObservedObject var viewModel: TimeZoneRowViewModel
+    var timeZoneRowViewModel: TimeZoneRowViewModel
 
     init(sourceTimeZone: String, targetTimeZone: String, date: Date) {
-        self.viewModel = TimeZoneRowViewModel(sourceTimeZone: sourceTimeZone, targetTimeZone: targetTimeZone, date: date)
+        self.timeZoneRowViewModel = TimeZoneRowViewModel(sourceTimeZone: sourceTimeZone, targetTimeZone: targetTimeZone, date: date)
     }
 
     var body: some View {
-        if viewModel.isValid {
+        if timeZoneRowViewModel.isValid {
             HStack {
-                Text(viewModel.targetTimeZone)
+                Text(timeZoneRowViewModel.targetTimeZone)
                     .frame(width: 300, alignment: .leading)
-                Text(viewModel.convertedTimeString)
+                Text(timeZoneRowViewModel.convertedTimeString)
                 Spacer()
             }
             .padding(.horizontal)
         } else {
-            Text(viewModel.convertedTimeString)
+            Text(timeZoneRowViewModel.convertedTimeString)
         }
     }
 }

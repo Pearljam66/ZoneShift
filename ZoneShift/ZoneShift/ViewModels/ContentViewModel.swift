@@ -5,22 +5,18 @@
 //  Created by Sarah Clark on 3/16/25.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
-class ContentViewModel: ObservableObject {
-    @Published var sourceTimeZone: String
-    @Published var startTime: Date
-    @Published var endTime: Date
-    @Published var newTimeZone: String = ""
+@Observable final class ContentViewModel {
+    var sourceTimeZone: String
+    var startTime: Date
+    var endTime: Date
+    var newTimeZone: String = ""
 
-    var modelContext: ModelContext {
-        didSet {
-            _savedTimeZones = Query()
-        }
-    }
+    var modelContext: ModelContext
+    var savedTimeZones: [SavedTimeZone] = []
 
-    @Query private var savedTimeZones: [SavedTimeZone]
     let allTimeZones = TimeZone.knownTimeZoneIdentifiers.sorted()
 
     init(modelContext: ModelContext) {
@@ -28,7 +24,22 @@ class ContentViewModel: ObservableObject {
         self.sourceTimeZone = TimeZone.current.identifier
         self.startTime = Calendar.current.date(bySettingHour: 17, minute: 0, second: 0, of: Date()) ?? Date() // Default 5:00 PM
         self.endTime = Calendar.current.date(bySettingHour: 18, minute: 0, second: 0, of: Date()) ?? Date() // Default 6:00 PM
-        self._savedTimeZones = Query()
+        self.refreshSavedTimeZones() // Initial fetch
+    }
+
+    func updateModelContext(_ newContext: ModelContext) {
+        self.modelContext = newContext
+        refreshSavedTimeZones()
+    }
+
+    private func refreshSavedTimeZones() {
+        let descriptor = FetchDescriptor<SavedTimeZone>(sortBy: [SortDescriptor(\.timeZoneName)])
+        do {
+            self.savedTimeZones = try modelContext.fetch(descriptor)
+        } catch {
+            print("Error fetching saved time zones: \(error)")
+            self.savedTimeZones = []
+        }
     }
 
     var availableTimeZones: [String] {
@@ -51,6 +62,7 @@ class ContentViewModel: ObservableObject {
             let newZone = SavedTimeZone(timeZoneName: newTimeZone)
             modelContext.insert(newZone)
             newTimeZone = ""
+            refreshSavedTimeZones()
         }
     }
 

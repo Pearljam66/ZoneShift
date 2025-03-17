@@ -10,12 +10,12 @@ import SwiftData
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var contentViewModel: ContentViewModel
+    @State private var contentViewModel: ContentViewModel
     @Environment(\.modelContext) private var modelContext
 
     init() {
         let context = try! ModelContext(ModelContainer(for: SavedTimeZone.self))
-        _contentViewModel = StateObject(wrappedValue: ContentViewModel(modelContext: context))
+        _contentViewModel = State(wrappedValue: ContentViewModel(modelContext: context))
     }
 
     // MARK: Body

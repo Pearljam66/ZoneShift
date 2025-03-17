@@ -7,7 +7,7 @@
 
 import Foundation
 
-class TimeZoneRowViewModel: ObservableObject {
+@Observable final class TimeZoneRowViewModel {
     let sourceTimeZone: String
     let targetTimeZone: String
     let date: Date

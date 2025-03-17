@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SidebarView: View {
-    @ObservedObject var contentViewModel: ContentViewModel
+    @Bindable var contentViewModel: ContentViewModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {

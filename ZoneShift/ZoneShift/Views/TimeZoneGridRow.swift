@@ -9,10 +9,10 @@ import SwiftUI
 
 struct TimeZoneGridRow: View {
     let timeZoneId: String
-    @ObservedObject var viewModel: ContentViewModel
+    var contentViewModel: ContentViewModel
 
     var body: some View {
-        if let (start, end) = viewModel.timeRange(for: timeZoneId) {
+        if let (start, end) = contentViewModel.timeRange(for: timeZoneId) {
             let calendar = Calendar.current
             let startHour = calendar.component(.hour, from: start)
             let endHour = calendar.component(.hour, from: end)
@@ -20,7 +20,7 @@ struct TimeZoneGridRow: View {
             HStack {
                 Text(timeZoneId)
                     .frame(width: 200, alignment: .leading)
-                Text(viewModel.formattedTimeRange(for: timeZoneId))
+                Text(contentViewModel.formattedTimeRange(for: timeZoneId))
                     .frame(width: 150, alignment: .center)
                 ZStack {
                     HStack(spacing: 0) {
