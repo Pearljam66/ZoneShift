@@ -5,6 +5,7 @@
 //  Created by Sarah Clark on 3/16/25.
 //
 
+import SwiftData
 import SwiftUI
 
 struct SidebarView: View {
@@ -41,4 +42,24 @@ struct SidebarView: View {
         .frame(minWidth: 200)
         .navigationTitle("ZoneShift")
     }
+}
+
+#Preview("Light Mode") {
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: SavedTimeZone.self, configurations: config)
+    let context = ModelContext(container)
+
+    let viewModel = ContentViewModel(modelContext: context)
+    return SidebarView(contentViewModel: viewModel)
+        .preferredColorScheme(.light)
+}
+
+#Preview("Dark Mode") {
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: SavedTimeZone.self, configurations: config)
+    let context = ModelContext(container)
+
+    let viewModel = ContentViewModel(modelContext: context)
+    return SidebarView(contentViewModel: viewModel)
+        .preferredColorScheme(.dark)
 }

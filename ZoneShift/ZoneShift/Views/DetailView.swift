@@ -5,6 +5,7 @@
 //  Created by Sarah Clark on 3/16/25.
 //
 
+import SwiftData
 import SwiftUI
 
 struct DetailView: View {
@@ -53,4 +54,24 @@ struct DetailView: View {
         }
     }
 
+}
+
+#Preview("Light Mode") {
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: SavedTimeZone.self, configurations: config)
+    let context = ModelContext(container)
+
+    let viewModel = ContentViewModel(modelContext: context)
+    return DetailView(contentViewModel: viewModel)
+        .preferredColorScheme(.light)
+}
+
+#Preview("Dark Mode") {
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: SavedTimeZone.self, configurations: config)
+    let context = ModelContext(container)
+
+    let viewModel = ContentViewModel(modelContext: context)
+    return DetailView(contentViewModel: viewModel)
+        .preferredColorScheme(.dark)
 }
