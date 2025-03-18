@@ -5,14 +5,29 @@
 //  Created by Sarah Clark on 3/16/25.
 //
 
-import SwiftData
 import SwiftUI
+import SwiftData
 
 struct SidebarView: View {
     @Bindable var contentViewModel: ContentViewModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
+            Text("Select Source Time Zone")
+                .font(.headline)
+                .padding(.horizontal)
+
+            Picker("Source Time Zone", selection: $contentViewModel.sourceTimeZone) {
+                ForEach(contentViewModel.allTimeZones, id: \.self) { timeZone in
+                    Text(timeZone).tag(timeZone)
+                }
+            }
+            .labelsHidden()
+            .padding(.horizontal)
+            .onChange(of: contentViewModel.sourceTimeZone) {
+                contentViewModel.refreshSavedTimeZones()
+            }
+
             Text("Add Time Zone")
                 .font(.headline)
                 .padding(.horizontal)

@@ -21,7 +21,7 @@ struct DetailView: View {
                 Text("Range")
                     .frame(width: 150, alignment: .center)
                 Text("Hours")
-                    .frame(width: 100, alignment: .trailing)
+                    .frame(width: 300, alignment: .center) // Adjusted for grid
             }
             .padding(.horizontal)
             .padding(.vertical, 5)
@@ -29,15 +29,35 @@ struct DetailView: View {
 
             // Time Zone Rows
             List {
+                // Source Timezone Row
+                if let startHour = contentViewModel.startHour(for: contentViewModel.sourceTimeZone),
+                   let endHour = contentViewModel.endHour(for: contentViewModel.sourceTimeZone) {
+                    TimeZoneRow(timeZoneId: contentViewModel.sourceTimeZone,
+                                timeRange: contentViewModel.formattedTimeRange(for: contentViewModel.sourceTimeZone),
+                                startHour: startHour,
+                                endHour: endHour,
+                                isSource: true,
+                                contentViewModel: contentViewModel)
+                    .listRowInsets(EdgeInsets())
+                }
+
+                // Saved Timezone Rows
                 ForEach(contentViewModel.savedTimeZoneList, id: \.timeZoneName) { savedZone in
-                    TimeZoneGridRow(timeZoneId: savedZone.timeZoneName, contentViewModel: contentViewModel)
+                    if let startHour = contentViewModel.startHour(for: savedZone.timeZoneName),
+                       let endHour = contentViewModel.endHour(for: savedZone.timeZoneName) {
+                        TimeZoneRow(timeZoneId: savedZone.timeZoneName,
+                                    timeRange: contentViewModel.formattedTimeRange(for: savedZone.timeZoneName),
+                                    startHour: startHour,
+                                    endHour: endHour,
+                                    isSource: false,
+                                    contentViewModel: contentViewModel)
                         .listRowInsets(EdgeInsets())
+                    }
                 }
             }
             .listStyle(.plain)
         }
     }
-
 }
 
 // MARK: - Previews
