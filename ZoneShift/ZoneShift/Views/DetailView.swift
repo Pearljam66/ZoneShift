@@ -32,27 +32,9 @@ struct DetailView: View {
                 ForEach(contentViewModel.savedTimeZoneList, id: \.timeZoneName) { savedZone in
                     TimeZoneGridRow(timeZoneId: savedZone.timeZoneName, contentViewModel: contentViewModel)
                         .listRowInsets(EdgeInsets())
-                        .contextMenu { // Add context menu for macOS
-                            Button("Delete") {
-                                contentViewModel.deleteTimeZone(savedZone)
-                            }
-                            .disabled(isInitialTimeZone(savedZone.timeZoneName))
-                        }
                 }
             }
             .listStyle(.plain)
-        }
-    }
-
-    private func isInitialTimeZone(_ timeZoneName: String) -> Bool {
-        let initialTimeZones = [TimeZone.current.identifier, "Europe/London"]
-        return initialTimeZones.contains(timeZoneName)
-    }
-
-    private func delete(at offsets: IndexSet) {
-        for index in offsets {
-            let timeZoneToDelete = contentViewModel.savedTimeZoneList[index]
-            contentViewModel.deleteTimeZone(timeZoneToDelete)
         }
     }
 

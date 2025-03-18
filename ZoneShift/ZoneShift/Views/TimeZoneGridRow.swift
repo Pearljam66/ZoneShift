@@ -19,10 +19,15 @@ struct TimeZoneGridRow: View {
             let endHour = calendar.component(.hour, from: end)
 
             HStack {
+                // Time Zone Name
                 Text(timeZoneId)
                     .frame(width: 200, alignment: .leading)
+
+                // Time Range
                 Text(contentViewModel.formattedTimeRange(for: timeZoneId))
                     .frame(width: 150, alignment: .center)
+
+                // 24-Hour Grid
                 ZStack {
                     HStack(spacing: 0) {
                         ForEach(0..<24, id: \.self) { hour in
@@ -44,12 +49,34 @@ struct TimeZoneGridRow: View {
                         }
                     )
                 }
+                .frame(maxWidth: .infinity)
+
+                Button(action: {
+                    if let timeZoneToDelete = contentViewModel.savedTimeZoneList.first(where: { $0.timeZoneName == timeZoneId }) {
+                        contentViewModel.deleteTimeZone(timeZoneToDelete)
+                    }
+                }) {
+                    Image(systemName: "trash")
+                        .foregroundColor(.red)
+                        .frame(width: 30, height: 30)
+                }
+                .buttonStyle(.plain)
+                .padding(.trailing, 10)
             }
             .padding(.horizontal)
+            .frame(maxWidth: .infinity)
         } else {
             Text("Invalid time zone: \(timeZoneId)")
                 .padding(.horizontal)
+                .onAppear {
+                    print("Invalid time zone: \(timeZoneId)")
+                }
         }
+    }
+
+    private func isInitialTimeZone(_ timeZoneName: String) -> Bool {
+        let initialTimeZones = [TimeZone.current.identifier, "Europe/London"]
+        return initialTimeZones.contains(timeZoneName)
     }
 
 }
