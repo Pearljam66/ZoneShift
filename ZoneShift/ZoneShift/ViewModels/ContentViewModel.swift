@@ -24,7 +24,24 @@ import SwiftUI
         self.sourceTimeZone = TimeZone.current.identifier
         self.startTime = Calendar.current.date(bySettingHour: 17, minute: 0, second: 0, of: Date()) ?? Date() // Default 5:00 PM
         self.endTime = Calendar.current.date(bySettingHour: 18, minute: 0, second: 0, of: Date()) ?? Date() // Default 6:00 PM
-        self.refreshSavedTimeZones() // Initial fetch
+
+        // Insert initial time zones: user's current and London
+        let currentTimeZone = TimeZone.current.identifier
+        let initialTimeZones = [currentTimeZone, "Europe/London"]
+
+        // Check if these time zones are already in the saved list to avoid duplicates
+        let descriptor = FetchDescriptor<SavedTimeZone>()
+        let existingZones = (try? modelContext.fetch(descriptor)) ?? []
+        let existingNames = existingZones.map { $0.timeZoneName }
+
+        for timeZone in initialTimeZones {
+            if !existingNames.contains(timeZone) {
+                let newZone = SavedTimeZone(timeZoneName: timeZone)
+                modelContext.insert(newZone)
+            }
+        }
+
+        refreshSavedTimeZones() // Initial fetch
     }
 
     func updateModelContext(_ newContext: ModelContext) {
@@ -85,6 +102,35 @@ import SwiftUI
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
         return "\(formatter.string(from: start)) - \(formatter.string(from: end))"
+    }
+
+    func deleteTimeZone(_ timeZone: SavedTimeZone) {
+        do {
+            modelContext.delete(timeZone)
+            refreshSavedTimeZones()
+        } catch {
+            print("Error deleting time zone: \(error)")
+        }
+    }
+
+    // For testing purposes
+    func deleteAllSavedTimeZones() {
+        do {
+            let descriptor = FetchDescriptor<SavedTimeZone>(sortBy: [SortDescriptor(\.timeZoneName)])
+            let allZones = try modelContext.fetch(descriptor)
+
+            // Optionally, preserve initial time zones (e.g., current and London)
+            let initialTimeZones = [TimeZone.current.identifier, "Europe/London"]
+            let zonesToDelete = allZones.filter { !initialTimeZones.contains($0.timeZoneName) }
+
+            for zone in zonesToDelete {
+                modelContext.delete(zone)
+            }
+
+            refreshSavedTimeZones()
+        } catch {
+            print("Error deleting saved time zones: \(error)")
+        }
     }
 
 }

@@ -10,6 +10,7 @@ import SwiftUI
 
 struct DetailView: View {
     var contentViewModel: ContentViewModel
+    @State private var isEditing = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -26,36 +27,38 @@ struct DetailView: View {
             .padding(.vertical, 5)
             .background(Color.gray.opacity(0.1))
 
-            // Toolbar-like area
-            VStack(alignment: .leading, spacing: 5) {
-                HStack {
-                    Text(contentViewModel.currentTimeZoneDisplay)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                    Spacer()
-                }
-                HStack {
-                    Text("London Time Zone")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                    Spacer()
-                }
-            }
-            .padding(.horizontal)
-
             // Time Zone Rows
             List {
                 ForEach(contentViewModel.savedTimeZoneList, id: \.timeZoneName) { savedZone in
                     TimeZoneGridRow(timeZoneId: savedZone.timeZoneName, contentViewModel: contentViewModel)
                         .listRowInsets(EdgeInsets())
+                        .contextMenu { // Add context menu for macOS
+                            Button("Delete") {
+                                contentViewModel.deleteTimeZone(savedZone)
+                            }
+                            .disabled(isInitialTimeZone(savedZone.timeZoneName))
+                        }
                 }
             }
             .listStyle(.plain)
         }
     }
 
+    private func isInitialTimeZone(_ timeZoneName: String) -> Bool {
+        let initialTimeZones = [TimeZone.current.identifier, "Europe/London"]
+        return initialTimeZones.contains(timeZoneName)
+    }
+
+    private func delete(at offsets: IndexSet) {
+        for index in offsets {
+            let timeZoneToDelete = contentViewModel.savedTimeZoneList[index]
+            contentViewModel.deleteTimeZone(timeZoneToDelete)
+        }
+    }
+
 }
 
+// MARK: - Previews
 #Preview("Light Mode") {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
     let container = try! ModelContainer(for: SavedTimeZone.self, configurations: config)
