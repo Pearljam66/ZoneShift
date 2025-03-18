@@ -16,6 +16,13 @@ struct TimeZoneRow: View {
     let isSource: Bool
     var contentViewModel: ContentViewModel
 
+    // Helper function to convert 24-hour format to 12-hour format
+    private func formatHour(_ hour: Int) -> String {
+        let adjustedHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour)
+        let period = hour < 12 ? "am" : "pm"
+        return "\(adjustedHour)\(period)"
+    }
+
     var body: some View {
         HStack(spacing: 0) {
             // Time Zone Name
@@ -27,11 +34,11 @@ struct TimeZoneRow: View {
             Text(timeRange)
                 .frame(width: 150, alignment: .center)
 
-            // 24-Hour Grid
+            // 12-Hour Grid (converted from 24-hour)
             ZStack {
                 HStack(spacing: 0) {
                     ForEach(0..<24, id: \.self) { hour in
-                        Text(String(format: "%02d", hour))
+                        Text(formatHour(hour))
                             .frame(width: 30, height: 30)
                             .background(Color.gray.opacity(0.1))
                             .foregroundColor(.secondary)
