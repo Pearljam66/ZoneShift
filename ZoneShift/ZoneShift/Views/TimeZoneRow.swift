@@ -42,7 +42,7 @@ struct TimeZoneRow: View {
                     }
                 }
                 .overlay(
-                    GeometryReader { geometry in
+                    GeometryReader { _ in
                         HStack(spacing: 0) {
                             let startX = CGFloat(startHour) * 30
                             let endX = CGFloat(endHour) * 30
@@ -60,11 +60,11 @@ struct TimeZoneRow: View {
                     if let timeZoneToDelete = contentViewModel.savedTimeZoneList.first(where: { $0.timeZoneName == timeZoneId }) {
                         contentViewModel.deleteTimeZone(timeZoneToDelete)
                     }
-                }) {
+                }, label: {
                     Image(systemName: "trash")
                         .foregroundColor(.red)
                         .frame(width: 30, height: 30)
-                }
+                })
                 .buttonStyle(.plain)
                 .padding(.trailing, 10)
             }

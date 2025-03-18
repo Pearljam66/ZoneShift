@@ -30,14 +30,14 @@ struct TimeZoneGridRow: View {
                 // 24-Hour Grid
                 ZStack {
                     HStack(spacing: 0) {
-                        ForEach(0..<24, id: \.self) { hour in
+                        ForEach(0..<24, id: \.self) { _ in
                             Rectangle()
                                 .fill(Color.gray.opacity(0.1))
                                 .frame(width: 30, height: 30)
                         }
                     }
                     .overlay(
-                        GeometryReader { geometry in
+                        GeometryReader { _ in
                             HStack(spacing: 0) {
                                 let startX = CGFloat(startHour) * 30
                                 let endX = CGFloat(endHour) * 30
@@ -55,11 +55,11 @@ struct TimeZoneGridRow: View {
                     if let timeZoneToDelete = contentViewModel.savedTimeZoneList.first(where: { $0.timeZoneName == timeZoneId }) {
                         contentViewModel.deleteTimeZone(timeZoneToDelete)
                     }
-                }) {
+                }, label: {
                     Image(systemName: "trash")
                         .foregroundColor(.red)
                         .frame(width: 30, height: 30)
-                }
+                })
                 .buttonStyle(.plain)
                 .padding(.trailing, 10)
             }

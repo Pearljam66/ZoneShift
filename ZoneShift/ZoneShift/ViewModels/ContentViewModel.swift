@@ -45,7 +45,7 @@ import SwiftUI
     }
 
     var availableTimeZones: [String] {
-        allTimeZones.filter { tz in !savedTimeZones.contains { $0.timeZoneName == tz } && tz != sourceTimeZone }
+        allTimeZones.filter { timezone in !savedTimeZones.contains { $0.timeZoneName == timezone } && timezone != sourceTimeZone }
     }
 
     func setSourceTimeZone(_ timeZone: String) {
@@ -63,12 +63,8 @@ import SwiftUI
     }
 
     func deleteTimeZone(_ timeZone: SavedTimeZone) {
-        do {
-            modelContext.delete(timeZone)
-            refreshSavedTimeZones()
-        } catch {
-            print("Error deleting time zone: \(error)")
-        }
+        modelContext.delete(timeZone)
+        refreshSavedTimeZones()
     }
 
     func timeRange(for timeZoneId: String) -> (start: Date, end: Date)? {
