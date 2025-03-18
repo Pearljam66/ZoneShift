@@ -16,7 +16,6 @@ struct TimeZoneRow: View {
     let isSource: Bool
     var contentViewModel: ContentViewModel
 
-    // Helper function to convert 24-hour format to 12-hour format
     private func formatHour(_ hour: Int) -> String {
         let adjustedHour = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour)
         let period = hour < 12 ? "am" : "pm"
@@ -24,15 +23,13 @@ struct TimeZoneRow: View {
     }
 
     var body: some View {
-        HStack(spacing: 0) {
-            // Time Zone Name
+        HStack {
             Text(timeZoneId)
-                .frame(width: 200, alignment: .leading)
+                .frame(width: 100)
                 .padding(.leading, 5)
 
-            // Time Range
             Text(timeRange)
-                .frame(width: 150, alignment: .center)
+                .frame(width: 200)
 
             // 12-Hour Grid (converted from 24-hour)
             ZStack {
@@ -57,9 +54,7 @@ struct TimeZoneRow: View {
                     }
                 )
             }
-            .frame(width: 300)
 
-            // Delete Button (for non-source timezones)
             if !isSource {
                 Button(action: {
                     if let timeZoneToDelete = contentViewModel.savedTimeZoneList.first(where: { $0.timeZoneName == timeZoneId }) {
@@ -77,6 +72,7 @@ struct TimeZoneRow: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(isSource ? Color.gray.opacity(0.05) : Color.clear)
     }
+
 }
 
 // MARK: - Previews
